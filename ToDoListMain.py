@@ -19,6 +19,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "/Login"
 
+
 class User(UserMixin, database.Model):
     id = database.Column(database.Integer, primary_key=True)
     username = database.Column(database.String(20), unique=True, nullable=False)
@@ -29,3 +30,18 @@ class Tasks(database.Model):
     id = database.Column(database.Integer, primary_key=True)
     user_id = database.Column(database.Integer, database.ForeignKey('user.id'))
     to_do = database.Column(database.String(250), nullable=False)
+
+with app.app_context():
+    database.create_all()
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+if __name__ == "__main__":
+    app.run(debug=True)
