@@ -18,7 +18,7 @@ database = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "/Login"
+login_manager.login_view = "Login"
 
 
 class User(UserMixin, database.Model):
@@ -54,7 +54,7 @@ def signup():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        if username == User.query.get(username=username).first():
+        if User.query.filter_by(username=username).first():
             error_message = "Username is taken"
             return render_template("signup.html", error=error_message)
         
@@ -63,9 +63,29 @@ def signup():
         database.session.add(new_user)
         database.session.commit()
 
-        return redirect(url_for("Login"))
+        return redirect(url_for("login"))
     
     return render_template("signup.html")
+
+@app.route("/Login", methods=["GET", "POST"])
+def login():
+
+    error_message = None
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        user = User.query.filter_by(username=username).first()
+
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            flash("User logged in successfully")
+            return render_template("login.html")
+        
+        return render_template("login.html", error=error_message)
+    
+    return render_template("login.html")
+
 
 
 
