@@ -6,3 +6,12 @@ h1 {
 .IndexPageHeader {
     text-align: center;
 }
+.IndexLoginSignup {
+    text-align: center;
+}
+
+
+.errormessage {
+    color: red;
+    text-align: center;
+}
