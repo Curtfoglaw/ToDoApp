@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 
@@ -42,6 +43,31 @@ def load_user(user_id):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/SignUp", methods=["GET", "POST"])
+def signup():
+
+    error_message = None
+
+    if request.method == "POST":
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        if username == User.query.get(username=username).first():
+            error_message = "Username is taken"
+            return render_template("signup.html", error=error_message)
+        
+        password_hash = generate_password_hash(password)
+        new_user = User(username=username, password=password_hash)
+        database.session.add(new_user)
+        database.session.commit()
+
+        return redirect(url_for("Login"))
+    
+    return render_template("signup.html")
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
