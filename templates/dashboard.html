@@ -22,14 +22,21 @@
         </div>
 
         <h2>Add a task:</h2>
+
         <form action="/UserDashboard" method="POST">
+            <input type="hidden" name="action" value="addtask">
             <input type="text" name="task" placeholder="Enter a task to complete">
             <button type="submit">+</button>
         </form>
 
         {% if task_list %}
             {% for task in task_list %}
-                <p>task: {{task}}</p>
+                <form action="/UserDashboard" method="POST">
+                    <p>task: {{task.to_do}}</p>
+                    <input type="hidden" name="action" value="deletetask">
+                    <input type="hidden" name="task_id" value="{{task.id}}">
+                    <button type="submit">-</button>
+                </form>
             {% endfor %}
         {% else %}
             <p>No tasks yet</p>

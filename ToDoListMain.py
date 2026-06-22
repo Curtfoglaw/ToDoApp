@@ -91,24 +91,49 @@ def login():
 @login_required
 def userdashboard():
 
-    current_tasks = []
-
     if request.method == "POST":
-        task = request.form.get("task")
 
-        newTask = Tasks(user_id=current_user.id, to_do=task)
-        database.session.add(newTask)
-        database.session.commit()
+        current_tasks_post = []
+        action = request.form.get("action")
+
+        if action == "addtask":
+
+            task = request.form.get("task")
+
+            newTask = Tasks(user_id=current_user.id, to_do=task)
+            database.session.add(newTask)
+            database.session.commit()
+            
+            tasks_data = Tasks.query.filter_by(user_id=current_user.id).all()
+            
+            for data in tasks_data:
+                current_tasks_post.append(data)
         
-        tasks_data = Tasks.query.filter_by(user_id=current_user.id).all()
+            return render_template("dashboard.html", username=current_user.username, task_list=current_tasks_post)
         
-        for data in tasks_data:
-            task = data.to_do
-            current_tasks.append(task)
+        elif action == "deletetask":
+
+            task_id = request.form.get("task_id")
+            Tasks.query.filter_by(id=task_id, user_id=current_user.id).delete()
+            database.session.commit()
+
+            tasks_data = Tasks.query.filter_by(user_id=current_user.id).all()
+            
+            for data in tasks_data:
+                current_tasks_post.append(data)
+            
+            return render_template("dashboard.html", username=current_user.username, task_list=current_tasks_post)
+
+            
     
-        return render_template("dashboard.html", username=current_user.username, task_list=current_tasks)
-    
-    return render_template("dashboard.html", username=current_user.username, task_list=current_tasks)
+    elif request.method == "GET":
+        current_task_get = []
+
+        task_data = Tasks.query.filter_by(user_id=current_user.id).all()
+
+        for data in task_data:
+            current_task_get.append(data)
+        return render_template("dashboard.html", username=current_user.username, task_list=current_task_get)
 
 if __name__ == "__main__":
     app.run(debug=True)
