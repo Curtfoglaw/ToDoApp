@@ -90,6 +90,25 @@ def login():
 @app.route("/UserDashboard", methods=["GET", "POST"])
 @login_required
 def userdashboard():
-    return render_template("dashboard.html", username=current_user.username)
+
+    current_tasks = []
+
+    if request.method == "POST":
+        task = request.form.get("task")
+
+        newTask = Tasks(user_id=current_user.id, to_do=task)
+        database.session.add(newTask)
+        database.session.commit()
+        
+        tasks_data = Tasks.query.filter_by(user_id=current_user.id).all()
+        
+        for data in tasks_data:
+            task = data.to_do
+            current_tasks.append(task)
+    
+        return render_template("dashboard.html", username=current_user.username, task_list=current_tasks)
+    
+    return render_template("dashboard.html", username=current_user.username, task_list=current_tasks)
+
 if __name__ == "__main__":
     app.run(debug=True)
