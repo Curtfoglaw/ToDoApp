@@ -3,16 +3,22 @@
     <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap">
         <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-        <title>Index</title>
+        <title>Dashboard</title>
     </head>
 
     <body>
         <div class="IndexPageHeader">
-            <h1>Welcome to the dashboard</h1>
+            <h1>Welcome {{username}}</h1>
         </div>
-        <div class="IndexLoginSignup">
+        <div class="dashboard">
             <p><a href="/Login">Login</a></p>
             <p><a href="/SignUp">Signup</a></p>
+        </div>
+        
+        <div class="flashmessages">
+            {% for msg in get_flashed_messages() %}
+                <p>{{msg}}</p>
+            {% endfor %}
         </div>
     </body>
 </html>

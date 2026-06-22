@@ -80,14 +80,16 @@ def login():
         if user and check_password_hash(user.password, password):
             login_user(user)
             flash("User logged in successfully")
-            return render_template("login.html")
+            return redirect(url_for("userdashboard"))
         
         return render_template("login.html", error=error_message)
     
     return render_template("login.html")
 
 
-
-
+@app.route("/UserDashboard", methods=["GET", "POST"])
+@login_required
+def userdashboard():
+    return render_template("dashboard.html", username=current_user.username)
 if __name__ == "__main__":
     app.run(debug=True)
