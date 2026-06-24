@@ -6,7 +6,6 @@ from flask_login import LoginManager, UserMixin, login_required, login_user, log
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
-
 app = Flask(__name__)
 load_dotenv()
 
@@ -98,6 +97,17 @@ def userdashboard():
 
         if action == "addtask":
 
+            num_tasks = Tasks.query.filter_by(user_id=current_user.id).count()
+
+            if num_tasks == 5:
+                tasks_data = Tasks.query.filter_by(user_id=current_user.id).all()
+            
+                for data in tasks_data:
+                    current_tasks_post.append(data)
+                
+                flash("Try completing some tasks before adding more!")
+                return render_template("dashboard.html", username=current_user.username, task_list=current_tasks_post)
+            
             task = request.form.get("task")
 
             newTask = Tasks(user_id=current_user.id, to_do=task)
@@ -123,6 +133,9 @@ def userdashboard():
                 current_tasks_post.append(data)
             
             return render_template("dashboard.html", username=current_user.username, task_list=current_tasks_post)
+        
+        elif action == "edittask":
+            task_id = request.form.get("task_id")
 
             
     
