@@ -4,8 +4,14 @@ h1 {
 }
 
 .IndexPageHeader {
-    text-align: center;
+    background-size: cover;      /* makes the image fill the area */
+    background-position: center; /* centers the image */
+    height: 200px;               /* or whatever height you want */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .IndexLoginSignup {
     text-align: center;
 }
@@ -18,5 +24,35 @@ h1 {
 
 .flashmessages {
     color: green;
+    text-align: center;
+}
+
+.dashboardbody {
+    font-family: Inter;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 400px;
+    margin: 0 auto;
+    padding: 5px 0;
+}
+
+.task form {
+    margin: 0;
+}
+
+.notaskstate {
+    text-align: center;
+}
+
+.addtask {
+    color: blue;
+    text-align: center;
+}
+
+.taskinput {
     text-align: center;
 }
