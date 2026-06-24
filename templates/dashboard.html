@@ -6,10 +6,12 @@
         <title>Dashboard</title>
     </head>
 
-    <body>
-        <div class="IndexPageHeader">
+    <body class="dashboardbody">
+
+        <div class="IndexPageHeader" style="background-image: url('{{ url_for('static', filename='images/background1.jpg') }}');">
             <h1>Welcome {{username}}</h1>
         </div>
+
         <div class="dashboard">
             <p><a href="/Login">Login</a></p>
             <p><a href="/SignUp">Signup</a></p>
@@ -21,25 +23,30 @@
             {% endfor %}
         </div>
 
-        <h2>Add a task:</h2>
+        <h2 class="addtask">Add a task:</h2>
 
-        <form action="/UserDashboard" method="POST">
+        <div class="taskinput">
+            <form action="/UserDashboard" method="POST">
             <input type="hidden" name="action" value="addtask">
             <input type="text" name="task" placeholder="Enter a task to complete">
             <button type="submit">+</button>
-        </form>
+            </form>
+        </div>
+
 
         {% if task_list %}
             {% for task in task_list %}
-                <form action="/UserDashboard" method="POST">
-                    <p>task: {{task.to_do}}</p>
+            <div class="task">
+                <p class="taskstring">task: {{task.to_do}}</p>
+                <form action="/UserDashboard" method="POST" class="delettaskform">
                     <input type="hidden" name="action" value="deletetask">
                     <input type="hidden" name="task_id" value="{{task.id}}">
                     <button type="submit">-</button>
                 </form>
+            </div>
             {% endfor %}
         {% else %}
-            <p>No tasks yet</p>
+            <p class="notaskstate">No tasks yet</p>
         {% endif %}
         
     </body>
