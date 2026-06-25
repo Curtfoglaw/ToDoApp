@@ -56,3 +56,93 @@ h1 {
 .taskinput {
     text-align: center;
 }
+
+/* Signup CSS*/
+
+.signupheader {
+    text-align: center;
+}
+
+.signupform {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.signupform form {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.signupform input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc
+}
+.signupform input:focus {
+    border-color: aquamarine;
+    outline: none;
+}
+
+.signupform button {
+    padding: 12px;
+    background: aquamarine;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+.signupform button:hover {
+    background: #7fffd4;
+}
+
+/* Login CSS*/
+
+.loginheader {
+    text-align: center;
+}
+
+.loginform {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.loginform form {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.loginform input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc
+}
+.loginform input:focus {
+    border-color: aquamarine;
+    outline: none;
+}
+
+.loginform button {
+    padding: 12px;
+    background: aquamarine;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+.loginform button:hover {
+    background: #7fffd4;
+}
