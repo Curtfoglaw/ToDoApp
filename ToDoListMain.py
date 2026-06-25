@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
-
+from isValidPassword import password_checker
 
 app = Flask(__name__)
 load_dotenv()
@@ -53,6 +53,11 @@ def signup():
         username = request.form.get("username")
         password = request.form.get("password")
 
+        valid_password = password_checker(password)
+
+        if valid_password != "Good password!":
+            return render_template("signup.html", error=valid_password)
+
         if User.query.filter_by(username=username).first():
             error_message = "Username is taken"
             return render_template("signup.html", error=error_message)
@@ -81,6 +86,7 @@ def login():
             flash("User logged in successfully")
             return redirect(url_for("userdashboard"))
         
+        error_message = "Incorrect username and/or password"
         return render_template("login.html", error=error_message)
     
     return render_template("login.html")
@@ -135,9 +141,7 @@ def userdashboard():
             return render_template("dashboard.html", username=current_user.username, task_list=current_tasks_post)
         
         elif action == "edittask":
-            task_id = request.form.get("task_id")
-
-            
+            task_id = request.form.get("task_id")         
     
     elif request.method == "GET":
         current_task_get = []
