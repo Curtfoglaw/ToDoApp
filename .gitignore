@@ -2,3 +2,6 @@ instance/
 *.db
 
 .env
+
+__pycache__/
+*
