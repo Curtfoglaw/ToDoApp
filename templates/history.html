@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap">
+        <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+        <title>History</title>
+    </head>
+
+    <body>
+        <div class="IndexPageHeader">
+            <h1>{{username}}'s history:</h1>
+        </div>
+        <div>
+            <table class="historytable">
+                <thead>
+                    <tr>
+                        <td>Task</td>
+                        <td>User</td>
+                        <td>Date Completed</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in task_history %}
+                        <tr>
+                            <td>{{task.to_do}}</td>
+                            <td>{{task.user.username}}</td>
+                            <td>{{task.timestamp}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

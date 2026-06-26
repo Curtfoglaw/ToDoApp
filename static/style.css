@@ -1,21 +1,10 @@
+
+/* General CSS */
+
 h1 {
     color: aquamarine;
     font-family: Inter;
 }
-
-.IndexPageHeader {
-    background-size: cover;      /* makes the image fill the area */
-    background-position: center; /* centers the image */
-    height: 200px;               /* or whatever height you want */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.IndexLoginSignup {
-    text-align: center;
-}
-
 
 .errormessage {
     color: red;
@@ -27,36 +16,37 @@ h1 {
     text-align: center;
 }
 
-.dashboardbody {
-    font-family: Inter;
-}
 
-.task {
+
+/* Homepage CSS*/
+.IndexPageHeader {
+    background-size: cover;      
+    background-position: center; 
+    height: 200px;               
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
-    width: 400px;
-    margin: 0 auto;
-    padding: 5px 0;
 }
 
-.task form {
-    margin: 0;
+.IndexLoginSignup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;        /* centers the links horizontally */
+    gap: 10px;                  /* space between Login and Signup */
+    background: white;
+    padding: 20px;
 }
 
-.notaskstate {
+.IndexLoginSignup a {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: aquamarine;
+    border-radius: 8px;
+    transition: 0.2s;
+    cursor: pointer;
     text-align: center;
 }
-
-.addtask {
-    color: blue;
-    text-align: center;
-}
-
-.taskinput {
-    text-align: center;
-}
-
 /* Signup CSS*/
 
 .signupheader {
@@ -145,4 +135,137 @@ h1 {
 
 .loginform button:hover {
     background: #7fffd4;
+}
+
+/* Dashboard CSS*/
+.dashboardbody {
+    font-family: Inter;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 250px;
+    margin: 0 auto;
+    padding: 12px;
+    border: 2px solid black;
+    margin-bottom: 10px; 
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.taskstring {
+    background: none;
+    border: none;
+    padding-left: 12px;
+}
+
+.task form button {
+    padding: 12px;
+    background: aquamarine;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+    padding-right: 12px;
+}
+
+.task form button:hover {
+    background: #7fffd4;
+}
+
+.notaskstate {
+    text-align: center;
+}
+
+.addtask {
+    color: aquamarine;
+    text-align: center;
+}
+
+.taskinput {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.taskinput input {
+    border-radius: 8px;
+    background-color: white;
+    padding: 12px;
+}
+
+.taskinput button {
+    padding: 12px;
+    background: aquamarine;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+.taskinput button:hover {
+    background: #7fffd4;
+}
+
+.checkbutton {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid black;
+    border-radius: 6px;
+    background: white;
+    transition: 0.2s;
+}
+
+.checkbox:checked + .checkmark {
+    background: aquamarine;
+    border-color: aquamarine;
+}
+
+/* history CSS */
+
+.historytable {
+    align-items: center;
+    width: 30%;
+    margin: 25px auto;
+    border-spacing: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-collapse: separate;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.historytable thead tr {
+    background: grey;
+    font-weight: 600;
+    padding: 12px 18px;
+    text-align: left;
+}
+
+.historytable tbody tr td {
+    padding: 12px 18px;
+    background: white;
+    border-bottom: 1px solid black;
+}
+
+.historytable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.historytable tbody tr:hover td {
+    background-color: lightblue;
+    transition: 0.2s ease-in-out;
 }

@@ -15,6 +15,7 @@
         <div class="dashboard">
             <p><a href="/Login">Login</a></p>
             <p><a href="/SignUp">Signup</a></p>
+            <p><a href="/TaskHistory">History</a></p>
         </div>
 
         <div class="flashmessages">
@@ -37,6 +38,16 @@
         {% if task_list %}
             {% for task in task_list %}
             <div class="task">
+
+                <form action="/UserDashboard" method="POST">
+                    <input type="hidden" name="action" value="completed">
+                    <input type="hidden" name="task_id" value="{{task.id}}">
+                    <label class="checkbutton">
+                        <input type="checkbox" class="checkbox" onchange="this.form.submit()" {% if task.completed %} checked {% endif %}>
+                        <span class="checkmark"></span>
+                    </label>
+                </form>
+
                 <p class="taskstring">task: {{task.to_do}}</p>
                 <form action="/UserDashboard" method="POST" class="delettaskform">
                     <input type="hidden" name="action" value="deletetask">
