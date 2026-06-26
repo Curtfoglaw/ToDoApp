@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from isValidPassword import password_checker
+from datetime import datetime
 
 app = Flask(__name__)
 load_dotenv()
@@ -25,11 +26,22 @@ class User(UserMixin, database.Model):
     username = database.Column(database.String(20), unique=True, nullable=False)
     password = database.Column(database.String(20), nullable=False)
     to_do_list_entries = database.relationship("Tasks", backref="user", lazy=True)
+    to_do_list_histroy = database.relationship("TaskHistory", backref="user", lazy=True)
 
 class Tasks(database.Model):
     id = database.Column(database.Integer, primary_key=True)
     user_id = database.Column(database.Integer, database.ForeignKey('user.id'))
     to_do = database.Column(database.String(250), nullable=False)
+    completed = database.Column(database.Boolean, default=False)
+
+class TaskHistory(database.Model):
+    id = database.Column(database.Integer, primary_key=True)
+    user_id = database.Column(database.Integer, database.ForeignKey('user.id'))
+    task_id = database.Column(database.Integer, database.ForeignKey('tasks.id'))
+    to_do = database.Column(database.String(250), nullable=False)
+    completed = database.Column(database.Boolean, nullable=False)
+    timestamp = database.Column(database.DateTime, default=datetime.now)
+
 
 with app.app_context():
     database.create_all()
@@ -116,6 +128,15 @@ def userdashboard():
             
             task = request.form.get("task")
 
+            if len(task) == 0:
+                tasks_data = Tasks.query.filter_by(user_id=current_user.id).all()
+            
+                for data in tasks_data:
+                    current_tasks_post.append(data)
+                
+                flash("Actually try adding a task dumbass!")
+                return render_template("dashboard.html", username=current_user.username, task_list=current_tasks_post)
+
             newTask = Tasks(user_id=current_user.id, to_do=task)
             database.session.add(newTask)
             database.session.commit()
@@ -130,9 +151,15 @@ def userdashboard():
         elif action == "deletetask":
 
             task_id = request.form.get("task_id")
-            Tasks.query.filter_by(id=task_id, user_id=current_user.id).delete()
-            database.session.commit()
+            task = Tasks.query.filter_by(id=task_id, user_id=current_user.id).first()
 
+            if task.completed == True:
+                history = TaskHistory(user_id=current_user.id, task_id=task.id, to_do=task.to_do, completed=task.completed)
+                database.session.add(history)
+
+            database.session.delete(task)
+            database.session.commit()
+            
             tasks_data = Tasks.query.filter_by(user_id=current_user.id).all()
             
             for data in tasks_data:
@@ -140,8 +167,21 @@ def userdashboard():
             
             return render_template("dashboard.html", username=current_user.username, task_list=current_tasks_post)
         
-        elif action == "edittask":
-            task_id = request.form.get("task_id")         
+        elif action == "completed":
+
+            task_id = request.form.get("task_id")  
+            task = Tasks.query.filter_by(user_id=current_user.id, id=task_id).first()
+
+            task.completed = not task.completed
+
+            database.session.commit()
+
+            tasks_data = Tasks.query.filter_by(user_id=current_user.id).all()
+
+            for data in tasks_data:
+                current_tasks_post.append(data)
+            
+            return render_template("dashboard.html", username=current_user.username, task_list=current_tasks_post)
     
     elif request.method == "GET":
         current_task_get = []
@@ -151,6 +191,13 @@ def userdashboard():
         for data in task_data:
             current_task_get.append(data)
         return render_template("dashboard.html", username=current_user.username, task_list=current_task_get)
+    
+@app.route("/TaskHistory", methods=["GET", "POST"])
+@login_required
+def taskhistory():
+
+    task_history = TaskHistory.query.filter_by(user_id=current_user.id).all()
+    return render_template("history.html", username=current_user.username, task_history=task_history)
 
 if __name__ == "__main__":
     app.run(debug=True)
